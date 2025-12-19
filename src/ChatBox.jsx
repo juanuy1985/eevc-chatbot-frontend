@@ -5,7 +5,7 @@ function ChatBox() {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your AI assistant. How can I help you today?",
+      text: "¡Hola! Soy tu asistente de IA. ¿Cómo puedo ayudarte hoy?",
       sender: 'ai',
       timestamp: new Date()
     }
@@ -17,13 +17,13 @@ function ChatBox() {
 
   // Mock AI responses
   const mockAIResponses = [
-    "That's an interesting question! Let me think about that...",
-    "I understand what you're asking. Here's what I can tell you:",
-    "Great question! Based on my knowledge, I would say...",
-    "I'm here to help! Let me provide some information about that.",
-    "Thanks for asking! Here's my perspective on this:",
-    "That's a good point. Let me explain further...",
-    "I appreciate your inquiry. From what I know..."
+    "¡Esa es una pregunta interesante! Déjame pensar sobre eso...",
+    "Entiendo lo que estás preguntando. Esto es lo que puedo decirte:",
+    "¡Excelente pregunta! Según mi conocimiento, diría que...",
+    "¡Estoy aquí para ayudar! Déjame proporcionarte información sobre eso.",
+    "¡Gracias por preguntar! Aquí está mi perspectiva sobre esto:",
+    "Es un buen punto. Déjame explicarlo más a fondo...",
+    "Aprecio tu consulta. Según lo que sé..."
   ]
 
   const scrollToBottom = () => {
@@ -89,8 +89,8 @@ function ChatBox() {
   return (
     <div className="chatbox-container">
       <div className="chatbox-header">
-        <h2>AI Chatbot</h2>
-        <p className="chatbox-subtitle">Ask me anything!</p>
+        <h2>Edilberto Enrique Vilca Castro</h2>
+        <p className="chatbox-subtitle">¡Pregúntame lo que quieras!</p>
       </div>
       
       <div className="chatbox-messages">
@@ -101,7 +101,7 @@ function ChatBox() {
           >
             <div className="message-content">
               <div className="message-sender">
-                {message.sender === 'user' ? 'You' : 'AI Assistant'}
+                {message.sender === 'user' ? 'Tú' : 'Asistente de IA'}
               </div>
               <div className="message-text">{message.text}</div>
             </div>
@@ -114,13 +114,13 @@ function ChatBox() {
         <input
           type="text"
           className="chatbox-input"
-          placeholder="Type your message..."
+          placeholder="Escribe tu mensaje..."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
         />
         <button type="submit" className="chatbox-send-button">
-          Send
+          Enviar
         </button>
       </form>
     </div>
