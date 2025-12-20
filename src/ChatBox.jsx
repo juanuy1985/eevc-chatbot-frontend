@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import './ChatBox.css'
+import ProductTable from './ProductTable'
 
 function ChatBox() {
   const [messages, setMessages] = useState([
@@ -11,20 +12,10 @@ function ChatBox() {
     }
   ])
   const [inputValue, setInputValue] = useState('')
+  const [clientCode] = useState('CLI-002') // Default client code
   const messagesEndRef = useRef(null)
   const messageIdCounter = useRef(2)
   const timeoutsRef = useRef(new Set())
-
-  // Mock AI responses
-  const mockAIResponses = [
-    "¡Esa es una pregunta interesante! Déjame pensar sobre eso...",
-    "Entiendo lo que estás preguntando. Esto es lo que puedo decirte:",
-    "¡Excelente pregunta! Según mi conocimiento, diría que...",
-    "¡Estoy aquí para ayudar! Déjame proporcionarte información sobre eso.",
-    "¡Gracias por preguntar! Aquí está mi perspectiva sobre esto:",
-    "Es un buen punto. Déjame explicarlo más a fondo...",
-    "Aprecio tu consulta. Según lo que sé..."
-  ]
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -43,12 +34,36 @@ function ChatBox() {
     }
   }, [])
 
-  const getRandomAIResponse = () => {
-    const randomIndex = Math.floor(Math.random() * mockAIResponses.length)
-    return mockAIResponses[randomIndex]
+  const sendMessageToAPI = async (message) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/ai/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          codigoCliente: clientCode,
+          message: message
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to get response from API')
+      }
+
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.error('Error calling API:', error)
+      // Return a fallback response
+      return {
+        responseMessage: 'Lo siento, no pude conectarme con el servidor. Por favor, inténtalo de nuevo más tarde.',
+        information: null
+      }
+    }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     
     if (inputValue.trim() === '') return
@@ -62,21 +77,22 @@ function ChatBox() {
     }
 
     setMessages(prevMessages => [...prevMessages, userMessage])
+    const currentMessage = inputValue
     setInputValue('')
 
-    // Simulate AI response with a delay
-    const timeoutId = setTimeout(() => {
-      const aiMessage = {
-        id: messageIdCounter.current++,
-        text: getRandomAIResponse(),
-        sender: 'ai',
-        timestamp: new Date()
-      }
-      setMessages(prevMessages => [...prevMessages, aiMessage])
-      timeoutsRef.current.delete(timeoutId)
-    }, 1000)
+    // Call the API
+    const apiResponse = await sendMessageToAPI(currentMessage)
     
-    timeoutsRef.current.add(timeoutId)
+    // Create AI message with response and optional product information
+    const aiMessage = {
+      id: messageIdCounter.current++,
+      text: apiResponse.responseMessage,
+      sender: 'ai',
+      timestamp: new Date(),
+      products: apiResponse.information?.response || null
+    }
+    
+    setMessages(prevMessages => [...prevMessages, aiMessage])
   }
 
   const handleKeyDown = (e) => {
@@ -104,6 +120,9 @@ function ChatBox() {
                 {message.sender === 'user' ? 'Tú' : 'Asistente de IA'}
               </div>
               <div className="message-text">{message.text}</div>
+              {message.products && message.products.length > 0 && (
+                <ProductTable products={message.products} />
+              )}
             </div>
           </div>
         ))}
