@@ -1,0 +1,80 @@
+.product-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 0.75rem;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  background-color: #2a2a2a;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.product-table thead {
+  background-color: #333;
+}
+
+.product-table th {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom: 2px solid #444;
+  font-size: 0.8rem;
+}
+
+.product-table td {
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid #333;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.product-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.product-table tbody tr:hover {
+  background-color: #333;
+}
+
+/* Make numeric columns right-aligned */
+.product-table td:nth-child(4),
+.product-table td:nth-child(5),
+.product-table td:nth-child(6) {
+  text-align: right;
+}
+
+.product-table th:nth-child(4),
+.product-table th:nth-child(5),
+.product-table th:nth-child(6) {
+  text-align: right;
+}
+
+/* Light mode support */
+@media (prefers-color-scheme: light) {
+  .product-table {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+  }
+
+  .product-table thead {
+    background-color: #f8f9fa;
+  }
+
+  .product-table th {
+    color: #213547;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .product-table td {
+    border-bottom: 1px solid #e9ecef;
+    color: #213547;
+  }
+
+  .product-table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+}
