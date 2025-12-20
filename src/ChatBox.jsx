@@ -81,15 +81,25 @@ function ChatBox() {
     setInputValue('')
 
     // Call the API
-    const apiResponse = await sendMessageToAPI(currentMessage)
-    
-    // Create AI message with response and optional product information
-    const aiMessage = {
-      id: messageIdCounter.current++,
-      text: apiResponse.responseMessage,
-      sender: 'ai',
-      timestamp: new Date(),
-      products: apiResponse.information?.response || null
+    const apiResponse = await sendMessageToAPI(currentMessage);
+    let aiMessage = null;
+    if (apiResponse.information && apiResponse.information.type === 'unknown') {
+      aiMessage = {
+        id: messageIdCounter.current++,
+        text: apiResponse.responseMessage,
+        sender: 'ai',
+        timestamp: new Date(),
+        products: [],
+      }
+    } else {
+      // Create AI message with response and optional product information
+      aiMessage = {
+        id: messageIdCounter.current++,
+        text: apiResponse.responseMessage,
+        sender: 'ai',
+        timestamp: new Date(),
+        products: apiResponse.information?.response || null
+      }
     }
     
     setMessages(prevMessages => [...prevMessages, aiMessage])
@@ -117,7 +127,7 @@ function ChatBox() {
           >
             <div className="message-content">
               <div className="message-sender">
-                {message.sender === 'user' ? 'Tú' : 'Asistente de IA'}
+                {message.sender === 'user' ? 'Tú' : 'Edilberto bot'}
               </div>
               <div className="message-text">{message.text}</div>
               {message.products && message.products.length > 0 && (
