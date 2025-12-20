@@ -25,8 +25,8 @@ function ProductTable({ products }) {
               <td>{product.tipoProducto}</td>
               <td>{product.nombreProducto}</td>
               <td>{product.cantidadStock}</td>
-              <td>${product.precioUnitario?.toFixed(2)}</td>
-              <td>${product.precioXMayor?.toFixed(2)}</td>
+              <td>{product.precioUnitario != null ? `$${product.precioUnitario.toFixed(2)}` : 'N/A'}</td>
+              <td>{product.precioXMayor != null ? `$${product.precioXMayor.toFixed(2)}` : 'N/A'}</td>
             </tr>
           ))}
         </tbody>
